@@ -17,6 +17,8 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [totalImages, setTotalImages] = useState(0);
 
+  console.log(images, query);
+
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsOpen(true);
@@ -31,9 +33,9 @@ function App() {
     const getImages = async () => {
       try {
         setIsLoading(true);
-        setPage(2);
-        const response = await fetchImages(query, 1);
-        setImages(response.results);
+        // setPage(2);
+        const response = await fetchImages(query, page);
+        setImages((prev) => [...prev, ...response.results]);
         setTotalImages(response.total);
         setIsLoading(false);
       } catch (error) {
@@ -42,15 +44,14 @@ function App() {
       }
     };
     getImages();
-  }, [query]);
+  }, [query, page]);
 
   const handleSubmit = (newQuery) => {
+    setImages([]);
     setQuery(newQuery);
   };
 
-  const handleLoadMore = async () => {
-    const response = await fetchImages(query, page);
-    setImages((prev) => [...prev, ...response.results]);
+  const handleLoadMore = () => {
     setPage((prev) => prev + 1);
   };
 
@@ -65,7 +66,7 @@ function App() {
         closeModal={closeModal}
         imageUrl={selectedImage}
       />
-      {images.length > 0 && !error && images.length < totalImages && (
+      {!isLoading && images.length < totalImages && (
         <LoadMoreBtn onLoadMore={handleLoadMore} />
       )}
     </>
