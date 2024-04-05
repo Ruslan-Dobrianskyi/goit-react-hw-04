@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import s from "./SearchBar.module.css";
 import { IoSearch } from "react-icons/io5";
+import PropTypes from "prop-types";
 
 const SearchBar = ({ onSubmit }) => {
   const [query, setQuery] = useState("");
@@ -36,6 +37,10 @@ const SearchBar = ({ onSubmit }) => {
       <Toaster position="top-right" />
     </>
   );
+};
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

@@ -17,8 +17,6 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [totalImages, setTotalImages] = useState(0);
 
-  console.log(images, query);
-
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsOpen(true);

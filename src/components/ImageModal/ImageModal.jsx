@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { IoMdCloseCircle } from "react-icons/io";
+import PropTypes from "prop-types";
 
 const ImageModal = ({ isOpen, closeModal, imageUrl }) => {
   return (
@@ -55,6 +56,12 @@ const ImageModal = ({ isOpen, closeModal, imageUrl }) => {
       />
     </Modal>
   );
+};
+
+ImageModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  imageUrl: PropTypes.string,
 };
 
 export default ImageModal;
