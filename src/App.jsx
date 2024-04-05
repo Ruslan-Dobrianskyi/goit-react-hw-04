@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import ImageModal from "./components/ImageModal/ImageModal";
@@ -15,6 +15,7 @@ function App() {
   const [error, setError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [totalImages, setTotalImages] = useState(0);
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -26,18 +27,25 @@ function App() {
     setIsOpen(false);
   };
 
-  const onClick = async (e) => {
-    try {
-      setIsLoading(true);
-      e.preventDefault();
-      setPage(2);
-      const response = await fetchImages(query, 1);
-      setImages(response.results);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setError(true);
-    }
+  useEffect(() => {
+    const getImages = async () => {
+      try {
+        setIsLoading(true);
+        setPage(2);
+        const response = await fetchImages(query, 1);
+        setImages(response.results);
+        setTotalImages(response.total);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(true);
+      }
+    };
+    getImages();
+  }, [query]);
+
+  const handleSubmit = (newQuery) => {
+    setQuery(newQuery);
   };
 
   const handleLoadMore = async () => {
@@ -48,7 +56,7 @@ function App() {
 
   return (
     <>
-      <SearchBar query={query} setQuery={setQuery} onClick={onClick} />
+      <SearchBar onSubmit={handleSubmit} />
       {isLoading && !error && <Loader />}
       <ImageGallery images={images} openModal={openModal} />
       {error && <ErrorMessage />}
@@ -57,7 +65,7 @@ function App() {
         closeModal={closeModal}
         imageUrl={selectedImage}
       />
-      {images.length > 0 && !error && (
+      {images.length > 0 && !error && images.length < totalImages && (
         <LoadMoreBtn onLoadMore={handleLoadMore} />
       )}
     </>
