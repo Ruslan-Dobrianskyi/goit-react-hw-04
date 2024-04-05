@@ -10,6 +10,7 @@ const SearchBar = ({ query, setQuery, onClick }) => {
       notify();
     } else {
       onClick(e);
+      e.target.reset();
     }
   };
   return (
@@ -20,7 +21,6 @@ const SearchBar = ({ query, setQuery, onClick }) => {
           type="text"
           name="query"
           placeholder="Search images and photos"
-          value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <button className={s.button} type="submit">

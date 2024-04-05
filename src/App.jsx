@@ -57,7 +57,9 @@ function App() {
         closeModal={closeModal}
         imageUrl={selectedImage}
       />
-      {images.length > 0 && <LoadMoreBtn onLoadMore={handleLoadMore} />}
+      {images.length > 0 && !error && (
+        <LoadMoreBtn onLoadMore={handleLoadMore} />
+      )}
     </>
   );
 }
